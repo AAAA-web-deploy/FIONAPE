@@ -4,3 +4,63 @@
 .scene-section{position:relative;width:100%;line-height:0}.scene-section>img{width:100%;height:auto}.flow-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}.hero-lily,.hero-petal{position:absolute;pointer-events:none;will-change:transform}.hero-lily{width:10%;left:66%;top:21.5%;animation:heroFloat 5.5s ease-in-out infinite alternate}.hero-petal{width:3.2%;left:56%;top:28.7%;animation:heroDrift 7s ease-in-out infinite alternate}.water-shine{position:absolute;pointer-events:none;background:linear-gradient(105deg,transparent 5%,#fff5bb00 30%,#fff6c98c 50%,#fff6c900 70%,transparent);mix-blend-mode:screen;filter:blur(3px);animation:glide 5.5s ease-in-out infinite alternate}.shine-one{top:22%;left:52%;width:23%;height:2.5%;transform:rotate(-5deg)}.shine-two{top:62%;left:17%;width:22%;height:2%;animation-delay:-2.8s}.floating-lily{animation-duration:5s}.sway-branch{animation-duration:6s}.sunbeams{animation-duration:7s}.mobile-pond::before{content:'';position:absolute;z-index:-1;pointer-events:none;left:0;right:0;bottom:0;height:42%;background:repeating-linear-gradient(175deg,transparent 0 13px,#d3edc00d 15px,transparent 18px 29px);animation:mobileFlow 4s linear infinite}.m-lily{animation-duration:5s}@keyframes heroFloat{0%{transform:translate(-8px,0) rotate(-3deg)}100%{transform:translate(12px,-8px) rotate(3deg)}}@keyframes heroDrift{0%{transform:translate(-6px,0) rotate(-8deg)}100%{transform:translate(20px,5px) rotate(15deg)}}@keyframes glide{0%{opacity:.1;translate:-18% 0}50%{opacity:.65}100%{opacity:.12;translate:18% 0}}@keyframes mobileFlow{0%{background-position:0 0}100%{background-position:60px 30px}}@media(prefers-reduced-motion:reduce){.flow-canvas,.hero-lily,.hero-petal,.water-shine{display:none!important}.mobile-pond::before{animation:none}}
 
 @media(max-width:740px){.m-hero-bg:before{content:"";position:absolute;inset:58% 0 0;background:repeating-linear-gradient(175deg,transparent 0 13px,#e4f4c817 15px,transparent 18px 29px);animation:mobileFlow 4s linear infinite}}@media(prefers-reduced-motion:reduce){.m-hero-bg:before{animation:none}}
+
+/* One sticky bar. The hero file still contains the old painted nav; 58px of its 430px height is clipped, not overwritten. */
+:root{--header-offset:88px}html{scroll-padding-top:var(--header-offset)}
+.site-header{position:sticky;top:0;z-index:30;width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto auto;grid-template-areas:"brand join toggle";align-items:center;gap:10px 12px;padding:10px 14px;background:#10281c;color:var(--cream);box-shadow:inset 0 -1px 0 rgba(255,241,200,.42),0 8px 18px rgba(0,0,0,.22)}
+.site-header .brand{grid-area:brand;justify-self:start;width:max-content;max-width:100%;min-width:0;font-family:PondBookman,Georgia,serif;font-size:16px;letter-spacing:.06em;color:#fff6df}
+.site-header .brand img{width:40px;height:40px;object-fit:cover;border:2px solid #f3e2b0;background:#143524}
+.site-header .brand span{overflow:hidden;text-overflow:ellipsis}
+.site-menu{display:contents}
+.site-header .site-nav,.site-header .contract,.site-header .socials{display:none}
+.site-nav{grid-area:nav;align-items:center;gap:6px 18px;min-width:0}
+.site-nav a{color:#fff6df;text-decoration:none;font:700 13px/1 PondSans,system-ui,sans-serif;letter-spacing:.14em;padding:10px 2px;white-space:nowrap}
+.site-nav a:hover{color:#ffd0dc}
+.join-pond{grid-area:join;justify-self:end;color:#fff;text-decoration:none;background:linear-gradient(#ffa9b8,#e95877);border:2px solid #ffced2;border-radius:999px;padding:10px 16px;font:700 12px/1 PondSans,system-ui,sans-serif;letter-spacing:.06em;box-shadow:0 3px 0 #a73054;white-space:nowrap}
+.join-pond:hover{filter:brightness(1.05)}
+.menu-toggle{grid-area:toggle;width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;border:1px solid rgba(255,241,200,.5);background:#183628;color:#fff6df;padding:0}
+.menu-bars{position:relative;width:16px;height:2px;background:currentColor;display:block}
+.menu-bars:before,.menu-bars:after{content:"";position:absolute;left:0;width:16px;height:2px;background:currentColor}
+.menu-bars:before{top:-6px}.menu-bars:after{top:6px}
+.site-header.is-open .menu-bars{background:transparent}
+.site-header.is-open .menu-bars:before{top:0;transform:rotate(45deg)}
+.site-header.is-open .menu-bars:after{top:0;transform:rotate(-45deg)}
+.site-header.is-open{grid-template-areas:"brand join toggle" "nav nav nav" "contract contract contract" "socials socials socials"}
+.site-header.is-open .site-nav,.site-header.is-open .contract,.site-header.is-open .socials{display:flex}
+.site-header.is-open .site-nav{flex-direction:column;align-items:stretch;gap:2px;padding-top:6px}
+.site-header.is-open .site-nav a{padding:12px 4px}
+.site-header .contract{grid-area:contract;margin:0;min-width:0;width:100%;background:rgba(255,241,200,.08);border:1px solid rgba(255,241,200,.18);border-radius:999px;padding:6px 8px 6px 12px}
+.site-header .bar-label{color:#d7c48a}
+.site-header .contract code{flex:1;min-width:0;max-width:none;color:#fff6df}
+.site-header .socials{grid-area:socials;flex-wrap:wrap;gap:8px;margin-left:0}
+.site-header .copy,.site-header .social{border-color:rgba(255,241,200,.35);background:#1b4030;color:#fff6df}
+@media(max-width:420px){.site-header{padding:8px 10px;gap:8px}.site-header .brand{font-size:13px;gap:7px;letter-spacing:.02em}.site-header .brand img{width:34px;height:34px}.join-pond{padding:9px 10px;font-size:11px;letter-spacing:.02em}}
+@media(max-width:360px){.site-header .brand{font-size:12px;letter-spacing:0}.join-pond{padding:8px 8px;letter-spacing:0}}
+@media(min-width:860px){
+ .site-header{grid-template-columns:auto minmax(0,1fr) auto auto;grid-template-areas:"brand nav join toggle";padding:10px 18px}
+ .site-header .site-nav{display:flex;justify-self:center}
+ .site-header.is-open{grid-template-areas:"brand nav join toggle" "contract contract contract contract" "socials socials socials socials"}
+ .site-header.is-open .site-nav{flex-direction:row;align-items:center;padding-top:0}
+ .site-header.is-open .site-nav a{padding:10px 2px}
+}
+@media(min-width:1100px){
+ .menu-toggle{display:none}
+ .site-header,.site-header.is-open{grid-template-columns:auto auto minmax(0,1fr) auto auto;grid-template-areas:"brand nav contract socials join";column-gap:16px;row-gap:0;padding:10px clamp(16px,2.4vw,36px)}
+ .site-header .contract,.site-header .socials{display:flex;width:auto}
+ .site-header .contract{justify-self:end;width:max-content;max-width:100%;padding:5px 6px 5px 12px}
+ .site-header .contract code{max-width:280px}
+ .site-header .socials{flex-wrap:nowrap}
+ .site-nav{gap:8px 22px}
+}
+.scene-section[data-water="hero"]{overflow:hidden;aspect-ratio:1024/372}
+.scene-section[data-water="hero"]>img,.scene-section[data-water="hero"]>.flow-canvas{position:absolute;inset:auto;left:0;width:100%;height:calc(430/372*100%);top:calc(-58/372*100%);max-width:none}
+.sunbeams{height:22.06%}
+.hero-lily{top:18.42%}.hero-petal{top:25.9%}
+.shine-one{top:18.94%;height:2.6%}.shine-two{top:60.51%;height:2.08%}
+.petal-a{top:27.25%}.petal-b{top:62.59%}
+.lily-a{top:59.68%}.lily-b{top:59.47%}
+.branch-a{top:30.37%}
+.s1{top:52.2%}.s2{top:56.35%}
+.water-button{top:55.83%;height:8.31%}
+.footer-join{top:88.57%;height:3.64%}
+.footer-x,.footer-telegram{top:95.84%;height:4.16%}

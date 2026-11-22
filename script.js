@@ -23,6 +23,40 @@
     else { el.title = 'Link coming soon'; }
   });
 
+  const header = document.querySelector('.site-header');
+  const menuToggle = document.getElementById('menu-toggle');
+  const menuLabel = menuToggle.querySelector('.sr-only');
+  const mobileLayout = window.matchMedia('(max-width: 740px)');
+  const wideLayout = window.matchMedia('(min-width: 1100px)');
+  function setMenu(open) {
+    header.classList.toggle('is-open', open);
+    menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    menuLabel.textContent = open ? 'Close menu' : 'Open menu';
+  }
+  menuToggle.addEventListener('click', () => setMenu(!header.classList.contains('is-open')));
+  function syncNav() {
+    const mobile = mobileLayout.matches;
+    document.querySelectorAll('[data-mobile-href]').forEach(link => {
+      link.setAttribute('href', mobile ? link.dataset.mobileHref : link.dataset.desktopHref);
+    });
+    if (window.matchMedia('(min-width: 1100px)').matches) setMenu(false);
+  }
+  document.querySelectorAll('.site-nav a, .join-pond').forEach(link => {
+    link.addEventListener('click', () => setMenu(false));
+  });
+  function syncOffset() {
+    const open = header.classList.contains('is-open');
+    if (open) header.classList.remove('is-open');
+    const height = Math.ceil(header.getBoundingClientRect().height + 12);
+    if (open) header.classList.add('is-open');
+    document.documentElement.style.setProperty('--header-offset', height + 'px');
+  }
+  syncNav();
+  syncOffset();
+  if (mobileLayout.addEventListener) mobileLayout.addEventListener('change', () => { syncNav(); syncOffset(); });
+  if (wideLayout.addEventListener) wideLayout.addEventListener('change', syncNav);
+  addEventListener('resize', syncOffset);
+
   // Each water canvas reuses the original section image as a texture. Its
   // feathered water-only mask leaves the characters, lettering and boundaries
   // untouched. Canvas draws use drawImage, so they also work from local files.
@@ -82,8 +116,8 @@
   art.addEventListener('click',event=>{
     if(motion.matches)return;if(event.target.closest('a'))return;
     let selected=null,x=0,y=0;
-    if(event.target.id==='water-button'){selected=scenes.find(s=>s.section.dataset.water==='pond');const r=selected.section.getBoundingClientRect();const xx=(event.clientX-r.left)/r.width,yy=(event.clientY-r.top)/r.height;const inside=event.detail!==0 && specs.pond.some(([cx,cy,rx,ry])=>((xx-cx)/rx)**2+((yy-cy)/ry)**2<=1.5);x=inside?xx:.78;y=inside?yy:.81;}
-    else for(const scene of scenes){const r=scene.section.getBoundingClientRect();if(event.clientX>=r.left&&event.clientX<=r.right&&event.clientY>=r.top&&event.clientY<=r.bottom){const xx=(event.clientX-r.left)/r.width,yy=(event.clientY-r.top)/r.height;if(specs[scene.section.dataset.water].some(([cx,cy,rx,ry])=>((xx-cx)/rx)**2+((yy-cy)/ry)**2<=1.5)){selected=scene;x=xx;y=yy;}break;}}
+    if(event.target.id==='water-button'){selected=scenes.find(s=>s.section.dataset.water==='pond');const r=selected.canvas.getBoundingClientRect();const xx=(event.clientX-r.left)/r.width,yy=(event.clientY-r.top)/r.height;const inside=event.detail!==0 && specs.pond.some(([cx,cy,rx,ry])=>((xx-cx)/rx)**2+((yy-cy)/ry)**2<=1.5);x=inside?xx:.78;y=inside?yy:.81;}
+    else for(const scene of scenes){const sectionBox=scene.section.getBoundingClientRect();if(event.clientX>=sectionBox.left&&event.clientX<=sectionBox.right&&event.clientY>=sectionBox.top&&event.clientY<=sectionBox.bottom){const r=scene.canvas.getBoundingClientRect();const xx=(event.clientX-r.left)/r.width,yy=(event.clientY-r.top)/r.height;if(specs[scene.section.dataset.water].some(([cx,cy,rx,ry])=>((xx-cx)/rx)**2+((yy-cy)/ry)**2<=1.5)){selected=scene;x=xx;y=yy;}break;}}
     if(selected)addRipple(selected,x,y,performance.now(),1.2);
   });
   let parallaxScheduled=false;
